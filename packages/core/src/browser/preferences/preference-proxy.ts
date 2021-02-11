@@ -21,12 +21,19 @@ import { PreferenceService } from './preference-service';
 import { PreferenceSchema, OverridePreferenceName } from './preference-contribution';
 import { PreferenceScope } from './preference-scope';
 
-export interface PreferenceChangeEvent<T> {
-    readonly preferenceName: keyof T;
-    readonly newValue?: T[keyof T];
-    readonly oldValue?: T[keyof T];
+export type PreferenceChangeEvent<T> = {
     affects(resourceUri?: string, overrideIdentifier?: string): boolean;
-}
+} & {
+    [K in keyof T]-?: {
+        readonly preferenceName: K;
+        readonly newValue: T[K];
+        /**
+         * Undefined if the preference is set for the first time.
+         */
+        // TODO: Use the default value instead of undefined?
+        readonly oldValue?: T[K];
+    }
+}[keyof T];
 
 export interface PreferenceEventEmitter<T> {
     readonly onPreferenceChanged: Event<PreferenceChangeEvent<T>>;
