@@ -49,6 +49,9 @@ export class MonacoEditorModel implements ITextEditorModel, TextEditorDocument {
 
     autoSave: 'on' | 'off' = 'on';
     autoSaveDelay: number = 500;
+    suppressOpenEditorWhenDirty = false;
+    lineNumbersMinChars = 3;
+
     /* @deprecated there is no general save timeout, each participant should introduce a sensible timeout  */
     readonly onWillSaveLoopTimeOut = 1500;
     protected bufferSavedVersionId: number;
